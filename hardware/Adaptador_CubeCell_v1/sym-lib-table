@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "AdaptaddorCubeCell-rescue")(type "Legacy")(uri "${KIPRJMOD}/AdaptaddorCubeCell-rescue.lib")(options "")(descr ""))
+  (lib (name "AdaptadorCubeCellV1-rescue")(type "Legacy")(uri "${KIPRJMOD}/AdaptadorCubeCellV1-rescue.lib")(options "")(descr ""))
+)
