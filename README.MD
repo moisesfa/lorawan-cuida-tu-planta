@@ -1,4 +1,4 @@
-# LoRaWAN Cuida Tus Plantas
+# LoRaWAN Cuida Tu Planta
 
 Pretendo desarrollar un nodo LoRaWAN para monitorizar las condiciones ambientales en las que crece una planta.
 
