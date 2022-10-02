@@ -15,7 +15,7 @@ El sensor de humedad del suelo será un [higrómetro capacitivo](https://www.lui
 ## Fases del proyecto 
 
 - Lectura individual de cada uno de los sensores con el puerto serie.
-    - BME280
+    - [BME280](/software/02_arduino_bme280/README.md)
     - BH1750
     - Humedad del suelo
 - Lectura individual de cada uno de los sensores y envio de datos LoRaWAN
