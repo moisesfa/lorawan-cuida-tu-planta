@@ -3,6 +3,7 @@
 Pretendo desarrollar un nodo LoRaWAN para monitorizar las condiciones ambientales en las que crece una planta.
 
 El cerebro será la placa de desarrollo [CubeCell](https://heltec.org/project/htcc-ab01/) del fabricante [Heltec Automation](https://heltec.org/). La placa a día de hoy (Septiembre de 20022), no se recomienda para diseños nuevos y le han puesto la etiqueta Phaseout. El fabricante recomienda una CubeCell-Dev-Board (V2) de la que todavía no hay documentación. Esto carece de importancia en este proyecto que pretende ser meramente educativo. También, pueden ser interesantes las modificaciones a la nueva versión en un futuro.
+En Octubre de 2022 ya hay documentación de la versión 2 de la [CubeCell-Dev-Board](https://heltec.org/project/htcc-ab01-v2/). A falta de pruebas, parece que va a ser compatible con la placa diseñada.  
 
 Se ha diseñado un circuito impreso para alimentar el circuito con una batería 18650 y poder conectar fácilmente los sensores i2c a usar. Vea la documentación [aquí](/hardware/README.md)
 
@@ -17,7 +18,7 @@ El sensor de humedad del suelo será un [higrómetro capacitivo](https://www.lui
 - Lectura individual de cada uno de los sensores con el puerto serie.
     - [BME280](/software/02_inicio_bme280/README.md)
     - [BH1750](/software/03_inicio_bh1750/README.md)
-    - [Humedad del suelo simulado](/software/04_inicio_ads1115/README.md)
+    - [Conversor analógico-digital para humedad del suelo](/software/04_inicio_ads1115/README.md)
     - Lectura de todos los sensores con el puerto serie de un PC
 
 - Envio de datos LoRaWAN
