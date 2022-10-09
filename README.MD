@@ -15,7 +15,7 @@ El sensor de humedad del suelo será un [higrómetro capacitivo](https://www.lui
 
 ## Fases del proyecto 
 
-- Lectura individual de cada uno de los sensores con el puerto serie.
+- Lectura de los sensores con el puerto serie.
     - [BME280](/software/02_inicio_bme280/README.md)
     - [BH1750](/software/03_inicio_bh1750/README.md)
     - [Conversor analógico-digital para humedad del suelo](/software/04_inicio_ads1115/README.md)
