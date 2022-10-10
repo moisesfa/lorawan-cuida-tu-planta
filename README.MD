@@ -22,5 +22,5 @@ El sensor de humedad del suelo será un [higrómetro capacitivo](https://www.lui
     - [Lectura de todos los sensores](/software/05_sensores_todos/README.md)
 
 - Envio de datos LoRaWAN
-    - Inicio con LoRaWAN
+    - [Inicio con LoRaWAN](/software/06_inicio_lorawan/README.md)
     - Añadimos la lectura de los sensores
