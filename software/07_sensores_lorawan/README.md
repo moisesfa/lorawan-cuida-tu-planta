@@ -9,6 +9,8 @@ uint8_t devEui[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // your d
 uint8_t appKey[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // your appKey
 ````
 
+Practicamente todo se basa en la [documentación de Heltec Automation](https://github.com/HelTecAutomation/CubeCell-Arduino/tree/master/libraries/LoRa/examples/LoRaWAN).
+
 El ciclo de trabajo de la aplicación es el siguiente:
 
 1. Se une con la aplicación LoRaWAN.
