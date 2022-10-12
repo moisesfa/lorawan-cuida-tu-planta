@@ -31,7 +31,7 @@ int r = 0,g = 0,b = 0;
 
 // function declaration
 void changeColorRGB (void);
-void readSensorBME680(void);
+void readSensorBME280(void);
 void readSensorBH1750(void);
 void readSensorAds1115(void);
 
@@ -65,7 +65,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  readSensorBME680();
+  readSensorBME280();
   readSensorBH1750();
   readSensorAds1115();
 
@@ -83,7 +83,7 @@ void changeColorRGB (void){
   b = random(0,255);
 }
 
-void readSensorBME680(void){
+void readSensorBME280(void){
 
   temperature = bme280.getTemperature();
   humidity = bme280.getHumidity();
