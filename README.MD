@@ -13,6 +13,8 @@ Para el nivel de luz, un sensor digital [BH1750](https://www.luisllamas.es/medir
 
 El sensor de humedad del suelo será un [higrómetro capacitivo](https://www.luisllamas.es/sensor-de-humedad-del-suelo-capacitivo-y-arduino/) para el que necesitaremos un conversor analógico digital (ADC) como el [ADS1115](https://www.luisllamas.es/entrada-analogica-adc-de-16-bits-con-arduino-y-ads1115/) ya que la CubeCell no dispone de entradas analógicas libres. Esto también nos dará la posibilidad de conectar hasta 4 sensores de humedad de suelo. 
 
+![](/software/docs/Cuitupla.drawio2.png)
+
 ## Fases del proyecto 
 
 - Lectura de los sensores con el puerto serie.
