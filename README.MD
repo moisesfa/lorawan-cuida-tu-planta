@@ -26,3 +26,11 @@ El sensor de humedad del suelo será un [higrómetro capacitivo](https://www.lui
 - Envio de datos LoRaWAN
     - [Inicio con LoRaWAN](/software/06_inicio_lorawan/README.md)
     - [Lectura de los sensores a LoRaWAN](/software/07_sensores_lorawan/README.md)
+
+## Resultado final
+
+Para proteger el sensor de humedad del suelo he seguido estas [instrucciones](https://www.instructables.com/Waterproofing-a-Capacitance-Soil-Moisture-Sensor/)
+
+El sensor de luminosidad se ha en este [formato de bola](https://a.aliexpress.com/_ExYB4vB) para una mejor colocación.
+
+TODO: Foto Final
