@@ -46,19 +46,53 @@ void setup(void)
 void loop(void) 
 {
   int16_t adc0, adc1, adc2, adc3;
+  
+  // Calibrating soil moisture sensor
+  // Adc values range 16 bits 0-65535 unsigned o −32768-32767 signed.
+  // Adc value dry = 15400
+  // Adc value wet = 7100
+
+  int8_t percentHum0, percentHum1, percentHum2, percentHum3;
+
+  float volts0, volts1, volts2, volts3;
 
   /* Be sure to update this value based on the IC and the gain settings! */
   //float   multiplier = 3.0F;    /* ADS1015 @ +/- 6.144V gain (12-bit results) */
-  float multiplier = 0.1875F; /* ADS1115  @ +/- 6.144V gain (16-bit results) */
+  //float multiplier = 0.1875F; /* ADS1115  @ +/- 6.144V gain (16-bit results) */
 
   adc0 = ads.readADC_SingleEnded(0);
   adc1 = ads.readADC_SingleEnded(1);
   adc2 = ads.readADC_SingleEnded(2);
   adc3 = ads.readADC_SingleEnded(3);
-  Serial.print("AIN0: "); Serial.println(adc0 * multiplier);
-  Serial.print("AIN1: "); Serial.println(adc1 * multiplier);
-  Serial.print("AIN2: "); Serial.println(adc2 * multiplier);
-  Serial.print("AIN3: "); Serial.println(adc3 * multiplier);
+
+  volts0 = ads.computeVolts(adc0);
+  volts1 = ads.computeVolts(adc1);
+  volts2 = ads.computeVolts(adc2);
+  volts3 = ads.computeVolts(adc3);
+  
+  // Calibrating soil moisture sensor
+  // Adc values range 16 bits 0-65535 unsigned o −32768-32767 signed.
+  // Adc value dry = 15400
+  // Adc value wet = 7100
+  // Map
+  //sensorValue = map(sensorvalue,valuedry,valuewet,0,100)
+  percentHum0 = map(adc0, 15400,7100,0,100);
+
+  Serial.print("AIN0: "); Serial.println(adc0);
+  Serial.print("Vols0: "); Serial.println(volts0);
+  Serial.print("Percent Humidity: "); Serial.print(percentHum0); Serial.println(" %");
+  Serial.println(" ");
+  
+  Serial.print("AIN1: "); Serial.println(adc1);
+  Serial.print("Volts1: "); Serial.println(volts1);
+  Serial.println(" ");
+  
+  Serial.print("AIN2: "); Serial.println(adc2);
+  Serial.print("Volts2: "); Serial.println(volts2);
+  Serial.println(" ");
+
+  Serial.print("AIN3: "); Serial.println(adc3);
+  Serial.print("Volts3: "); Serial.println(volts3);
   Serial.println(" ");
   
   pixels.setPixelColor(0, pixels.Color(i, 0, i));

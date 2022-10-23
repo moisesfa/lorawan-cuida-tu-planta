@@ -13,6 +13,18 @@ La conexión eléctrica es muy simple:
   
 En A0, A1, A2, A3 se conectan las señales analógicas de los sensores de humedad de suelo.
 
-![](/software/docs/20221008_ads1115.jpg)
 
-![](/software/docs/Result_ads1115.PNG)
+## Calibración
+
+Buscamos el valor del conversor con el sensor de humedad seco:
+
+![](/software/docs/20221008_ads1115.jpg)
+![](/software/docs/humedad0.PNG)
+
+Buscamos el valor del conversor con el sensor de humedad humedo:
+
+![](/software/docs/20221023_calibrar.jpg)
+![](/software/docs/humedad100.PNG)
+
+
+Y mapeamos los valores con la función map de Arduino.
