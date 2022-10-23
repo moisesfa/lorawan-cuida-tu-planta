@@ -29,6 +29,7 @@ uint16_t int_alti_bme280;
 uint16_t int_lux_bh1750;
 // Variables sensors ads1115
 int16_t int_adc0, int_adc1, int_adc2, int_adc3;
+int8_t int_perHum0, int_perHum1, int_perHum2, int_perHum3;
 
 /*
  * set LoraWan_RGB to Active,the RGB active in loraWan
@@ -108,13 +109,14 @@ void readBatteryVoltage()
 
 void readSensorBME280(void)
 {
-
+	
 	// Start bme280
 	if (!bme280.init())
 	{
 		// debug
 		Serial.println("Device error!");
 	}
+	delay(100);
 
 	// Read sensor BME280
 	Serial.println("");
@@ -163,12 +165,12 @@ void readSensorBH1750(void)
 {
 
 	// Sensor BH1750
-	
 	if (!lightMeter.begin()) {
     	Serial.println("Failed to initialize lightMeter.");
   	} else {
 		Serial.println(F("lightMeter begin"));
 	}
+	delay(100);
 
 	float lux_bh1750 = lightMeter.readLightLevel(); 
 
@@ -205,6 +207,7 @@ void readSensorAds1115(void)
   	} else {
 		Serial.println(F("ADS1115 begin"));
 	}
+	delay(100);
 
 	/* Be sure to update this value based on the IC and the gain settings! */
 	// float   multiplier = 3.0F;    /* ADS1015 @ +/- 6.144V gain (12-bit results) */
@@ -216,11 +219,20 @@ void readSensorAds1115(void)
 	int_adc2 = ads.readADC_SingleEnded(2);
 	int_adc3 = ads.readADC_SingleEnded(3);
 
+	// Percent Humidity only one 
+	int_perHum0 = map(int_adc0, 15400,7100,0,100);
+	int_perHum1 = 0;
+	int_perHum2 = 0;
+	int_perHum3 = 0;
+	
 	Serial.print("AIN0: ");
 	volts0 = ads.computeVolts(int_adc0);
 	Serial.print(volts0);
 	Serial.print(" => ");
 	Serial.print(int_adc0);
+	Serial.print(" ttn ");
+	Serial.print(" PerHum0: ");
+	Serial.print(int_perHum0);
 	Serial.println(" ttn");
 
 	Serial.print("AIN1: ");
@@ -228,13 +240,19 @@ void readSensorAds1115(void)
 	Serial.print(volts1);
 	Serial.print(" => ");
 	Serial.print(int_adc1);
+	Serial.print(" ttn ");
+	Serial.print(" PerHum1: ");
+	Serial.print(int_perHum1);
 	Serial.println(" ttn");
-	
+
 	Serial.print("AIN2: ");
 	volts2 = ads.computeVolts(int_adc2);
 	Serial.print(volts2);
 	Serial.print(" => ");
 	Serial.print(int_adc2);
+	Serial.print(" ttn ");
+	Serial.print(" PerHum2: ");
+	Serial.print(int_perHum2);
 	Serial.println(" ttn");
 
 	Serial.print("AIN3: ");
@@ -242,6 +260,9 @@ void readSensorAds1115(void)
 	Serial.print(volts3);
 	Serial.print(" => ");
 	Serial.print(int_adc3);
+	Serial.print(" ttn ");
+	Serial.print(" PerHum0: ");
+	Serial.print(int_perHum0);
 	Serial.println(" ttn");
 
 }
@@ -251,6 +272,7 @@ void readSensors()
 	// Vext ON
 	pinMode(Vext, OUTPUT);
 	digitalWrite(Vext, LOW);
+
 	delay(1000);
 	// debug
 	Serial.println("");
@@ -280,7 +302,7 @@ static void prepareTxFrame(uint8_t port)
 	readBatteryVoltage();
 	readSensors();
 
-	appDataSize = 20;
+	appDataSize = 24;
 	// Battery
 	appData[0] = (uint8_t)(BatteryVoltage >> 8);
 	appData[1] = (uint8_t)BatteryVoltage;
@@ -308,7 +330,11 @@ static void prepareTxFrame(uint8_t port)
 	appData[17] = (uint8_t)int_adc2;
 	appData[18] = (uint8_t)(int_adc3 >> 8);
 	appData[19] = (uint8_t)int_adc3;
-
+	// Ads1115 percent humidity 
+	appData[20] = (uint8_t)int_perHum0;
+	appData[21] = (uint8_t)int_perHum1;
+	appData[22] = (uint8_t)int_perHum2;
+	appData[23] = (uint8_t)int_perHum3;
 	
 }
 

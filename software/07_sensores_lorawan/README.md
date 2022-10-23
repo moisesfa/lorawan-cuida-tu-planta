@@ -19,6 +19,7 @@ El ciclo de trabajo de la aplicación es el siguiente:
 4. Se despierta, lee los sensores y vuelve a enviar los datos.
 5. Los pasos 3 y 4 se repiten hasta que la batería se agota o se resetea el dispositivo.
 
+![](/software/docs/Result_lorawan_sensores.PNG)
 
 Ejemplo en The Things Stack: 
 
