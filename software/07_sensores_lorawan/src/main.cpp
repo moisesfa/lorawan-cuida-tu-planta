@@ -60,7 +60,8 @@ LoRaMacRegion_t loraWanRegion = ACTIVE_REGION;
 DeviceClass_t loraWanClass = LORAWAN_CLASS;
 
 /*the application data transmission duty cycle.  value in [ms].*/
-uint32_t appTxDutyCycle = 30 * 1000;
+//uint32_t appTxDutyCycle = 60 * 60 * 1000;
+uint32_t appTxDutyCycle = 30 * 1000;		//Debug
 
 /*OTAA or ABP*/
 bool overTheAirActivation = LORAWAN_NETMODE;
@@ -114,14 +115,16 @@ void readSensorBME280(void)
 	if (!bme280.init())
 	{
 		// debug
-		Serial.println("Device error!");
+		Serial.println("");
+		Serial.println("Failed to initialize bme280");
+	} else{
+		Serial.println("");
+		Serial.println("bme280 begin");
 	}
-	delay(100);
+	
+	delay(100);		// Bad read without delay 
 
 	// Read sensor BME280
-	Serial.println("");
-	Serial.println("DATOS BME280");
-	
 	float temp_bme280 = bme280.getTemperature(); 
 	float humi_bme280 = bme280.getHumidity(); 
 	float pres_bme280 = bme280.getPressure();
@@ -166,11 +169,14 @@ void readSensorBH1750(void)
 
 	// Sensor BH1750
 	if (!lightMeter.begin()) {
-    	Serial.println("Failed to initialize lightMeter.");
+		Serial.println("");
+    	Serial.println("Failed to initialize lightMeter");
   	} else {
+		Serial.println("");
 		Serial.println(F("lightMeter begin"));
 	}
-	delay(100);
+
+	delay(100); // Bad read without delay 
 
 	float lux_bh1750 = lightMeter.readLightLevel(); 
 
@@ -186,8 +192,8 @@ void readSensorBH1750(void)
 
 void readSensorAds1115(void)
 {
-	Serial.println("Getting single-ended readings from AIN0..3");
-  	Serial.println("ADC Range: +/- 6.144V (1 bit = 3mV/ADS1015, 0.1875mV/ADS1115)");
+  //Serial.println("Getting single-ended readings from AIN0..3");
+  //Serial.println("ADC Range: +/- 6.144V (1 bit = 3mV/ADS1015, 0.1875mV/ADS1115)");
 
   // The ADC input range (or gain) can be changed via the following
   // functions, but be careful never to exceed VDD +0.3V max, or to
@@ -203,11 +209,14 @@ void readSensorAds1115(void)
   // ads.setGain(GAIN_SIXTEEN);    // 16x gain  +/- 0.256V  1 bit = 0.125mV  0.0078125mV
 
 	if (!ads.begin()) {
-    	Serial.println("Failed to initialize ADS.");
+		Serial.println("");
+    	Serial.println("Failed to initialize ADS1115");
   	} else {
+		Serial.println("");
 		Serial.println(F("ADS1115 begin"));
 	}
-	delay(100);
+	
+	delay(100); // Bad read without delay
 
 	/* Be sure to update this value based on the IC and the gain settings! */
 	// float   multiplier = 3.0F;    /* ADS1015 @ +/- 6.144V gain (12-bit results) */
@@ -215,9 +224,12 @@ void readSensorAds1115(void)
 	float volts0, volts1, volts2, volts3;
 
 	int_adc0 = ads.readADC_SingleEnded(0);
-	int_adc1 = ads.readADC_SingleEnded(1);
-	int_adc2 = ads.readADC_SingleEnded(2);
-	int_adc3 = ads.readADC_SingleEnded(3);
+	//int_adc1 = ads.readADC_SingleEnded(1);
+	int_adc1 = 0;
+	//int_adc2 = ads.readADC_SingleEnded(2);
+	int_adc2 = 0;	
+	//int_adc3 = ads.readADC_SingleEnded(3);
+	int_adc3 = 0;
 
 	// Percent Humidity only one 
 	int_perHum0 = map(int_adc0, 15400,7100,0,100);
@@ -262,8 +274,10 @@ void readSensorAds1115(void)
 	Serial.print(int_adc3);
 	Serial.print(" ttn ");
 	Serial.print(" PerHum0: ");
-	Serial.print(int_perHum0);
+	Serial.print(int_perHum3);
 	Serial.println(" ttn");
+	Serial.println("");
+
 
 }
 
