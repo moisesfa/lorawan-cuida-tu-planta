@@ -13,7 +13,11 @@ Para el nivel de luz, un sensor digital [BH1750](https://www.luisllamas.es/medir
 
 El sensor de humedad del suelo será un [higrómetro capacitivo](https://www.luisllamas.es/sensor-de-humedad-del-suelo-capacitivo-y-arduino/) para el que necesitaremos un conversor analógico digital (ADC) como el [ADS1115](https://www.luisllamas.es/entrada-analogica-adc-de-16-bits-con-arduino-y-ads1115/) ya que la CubeCell no dispone de entradas analógicas libres. Esto también nos dará la posibilidad de conectar hasta 4 sensores de humedad de suelo. 
 
+<div style="text-align: center;">
+
 ![](/software/docs/Cuitupla.drawio2.png)
+
+</div>
 
 ## Fases del proyecto 
 
@@ -33,4 +37,22 @@ Para proteger el sensor de humedad del suelo he seguido estas [instrucciones](ht
 
 El sensor de luminosidad se ha usado en este [formato de bola](https://a.aliexpress.com/_ExYB4vB) para una mejor colocación.
 
-TODO: Foto Final
+![](./hardware/Adaptador_CubeCell_v1/docs/result_final.jpg)
+
+## Análisis de consumo
+
+He analizado el consumo con el [Power-Profiler-Kit-2](https://www.nordicsemi.com/Products/Development-hardware/Power-Profiler-Kit-2) y dejo aquí los resultados.
+
+![](./hardware/Adaptador_CubeCell_v1/docs/consumo.jpg)
+
+<div style="text-align: center;">
+
+![](./hardware/Adaptador_CubeCell_v1/docs/resul_cons1.PNG)
+
+![](./hardware/Adaptador_CubeCell_v1/docs/resul_cons2.PNG)
+
+![](./hardware/Adaptador_CubeCell_v1/docs/resul_cons3.PNG)
+
+</div>
+
+
