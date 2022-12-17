@@ -24,4 +24,3 @@ El ciclo de trabajo de la aplicación es el siguiente:
 Ejemplo en The Things Stack: 
 
 ![Ejemplo en The Things Stack](/software/docs/Result_lorawan_tts_sensores.PNG)
-

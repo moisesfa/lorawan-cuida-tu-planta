@@ -13,6 +13,10 @@
 // Converter ADS1115
 #include <Adafruit_ADS1X15.h>
 
+// Serial debug
+//#define DEBUG
+#include "debug_utils.h"
+
 // Objects
 BME280 bme280;
 BH1750 lightMeter;
@@ -60,8 +64,8 @@ LoRaMacRegion_t loraWanRegion = ACTIVE_REGION;
 DeviceClass_t loraWanClass = LORAWAN_CLASS;
 
 /*the application data transmission duty cycle.  value in [ms].*/
-//uint32_t appTxDutyCycle = 60 * 60 * 1000;
-uint32_t appTxDutyCycle = 30 * 1000;		//Debug
+uint32_t appTxDutyCycle = 60 * 60 * 1000;
+//uint32_t appTxDutyCycle = 1 * 60 * 1000;		//Debug
 
 /*OTAA or ABP*/
 bool overTheAirActivation = LORAWAN_NETMODE;
@@ -103,9 +107,9 @@ uint8_t confirmedNbTrials = 4;
 void readBatteryVoltage()
 {
 	BatteryVoltage = getBatteryVoltage();
-	Serial.println("");
-	Serial.print("BatteryVoltage: ");
-	Serial.println(BatteryVoltage);
+	DEBUG_PRINTLN("");
+	DEBUG_PRINT("BatteryVoltage: ");
+	DEBUG_PRINTLN(BatteryVoltage);
 }
 
 void readSensorBME280(void)
@@ -115,53 +119,53 @@ void readSensorBME280(void)
 	if (!bme280.init())
 	{
 		// debug
-		Serial.println("");
-		Serial.println("Failed to initialize bme280");
+		DEBUG_PRINTLN("");
+		DEBUG_PRINTLN("Failed to initialize bme280");
 	} else{
-		Serial.println("");
-		Serial.println("bme280 begin");
-	}
+		DEBUG_PRINTLN("");
+		DEBUG_PRINTLN("bme280 begin");
 	
-	delay(100);		// Bad read without delay 
+		delay(100);		
 
-	// Read sensor BME280
-	float temp_bme280 = bme280.getTemperature(); 
-	float humi_bme280 = bme280.getHumidity(); 
-	float pres_bme280 = bme280.getPressure();
-	float alti_bme280 = bme280.calcAltitude(pres_bme280);
+		// Read sensor BME280
+		float temp_bme280 = bme280.getTemperature(); 
+		float humi_bme280 = bme280.getHumidity(); 
+		float pres_bme280 = bme280.getPressure();
+		float alti_bme280 = bme280.calcAltitude(pres_bme280);
 
-	// get and print temperatures
-	Serial.print("Temp: ");
-	int_temp_bme280 = temp_bme280 * 100;
-	Serial.print(temp_bme280);
-	Serial.print(" C => ");
-	Serial.print(int_temp_bme280);
-	Serial.println(" ttn");
+		// get and print temperatures
+		DEBUG_PRINT("Temp: ");
+		int_temp_bme280 = temp_bme280 * 100;
+		DEBUG_PRINT(temp_bme280);
+		DEBUG_PRINT(" C => ");
+		DEBUG_PRINT(int_temp_bme280);
+		DEBUG_PRINTLN(" ttn");
 
-	// get and print humidity data
-	Serial.print("Humidity: ");
+		// get and print humidity data
+		DEBUG_PRINT("Humidity: ");
 
-	int_humi_bme280 = humi_bme280 * 100;
-	Serial.print(humi_bme280);
-	Serial.print(" % => ");
-	Serial.print(int_humi_bme280);
-	Serial.println(" ttn");
+		int_humi_bme280 = humi_bme280 * 100;
+		DEBUG_PRINT(humi_bme280);
+		DEBUG_PRINT(" % => ");
+		DEBUG_PRINT(int_humi_bme280);
+		DEBUG_PRINTLN(" ttn");
 
-	// get and print atmospheric pressure data
-	Serial.print("Pressure: ");
-	int_pres_bme280 = pres_bme280 / 10;
-	Serial.print(pres_bme280);
-	Serial.print(" Pa => ");
-	Serial.print(int_pres_bme280);
-	Serial.println(" ttn");
+		// get and print atmospheric pressure data
+		DEBUG_PRINT("Pressure: ");
+		int_pres_bme280 = pres_bme280 / 10;
+		DEBUG_PRINT(pres_bme280);
+		DEBUG_PRINT(" Pa => ");
+		DEBUG_PRINT(int_pres_bme280);
+		DEBUG_PRINTLN(" ttn");
 
-	// get and print altitude data
-	Serial.print("Altitude: ");
-	int_alti_bme280 = alti_bme280 * 10;
-	Serial.print(alti_bme280);
-	Serial.print(" m => ");
-	Serial.print(int_alti_bme280);
-	Serial.println(" ttn");
+		// get and print altitude data
+		DEBUG_PRINT("Altitude: ");
+		int_alti_bme280 = alti_bme280 * 10;
+		DEBUG_PRINT(alti_bme280);
+		DEBUG_PRINT(" m => ");
+		DEBUG_PRINT(int_alti_bme280);
+		DEBUG_PRINTLN(" ttn");
+		}
 }
 
 void readSensorBH1750(void)
@@ -169,31 +173,31 @@ void readSensorBH1750(void)
 
 	// Sensor BH1750
 	if (!lightMeter.begin()) {
-		Serial.println("");
-    	Serial.println("Failed to initialize lightMeter");
+		DEBUG_PRINTLN("");
+    	DEBUG_PRINTLN("Failed to initialize lightMeter");
   	} else {
-		Serial.println("");
-		Serial.println(F("lightMeter begin"));
+		DEBUG_PRINTLN("");
+		DEBUG_PRINTLN(F("lightMeter begin"));
+
+		delay(100); // Bad read without delay 
+
+		float lux_bh1750 = lightMeter.readLightLevel(); 
+
+		// get and print lux
+		DEBUG_PRINT("Light: ");
+		int_lux_bh1750 = lux_bh1750;
+		DEBUG_PRINT(lux_bh1750);
+		DEBUG_PRINT(" lx => ");
+		DEBUG_PRINT(int_lux_bh1750);
+		DEBUG_PRINTLN(" ttn");
 	}
-
-	delay(100); // Bad read without delay 
-
-	float lux_bh1750 = lightMeter.readLightLevel(); 
-
-	// get and print lux
-	Serial.print("Light: ");
-	int_lux_bh1750 = lux_bh1750;
-	Serial.print(lux_bh1750);
-	Serial.print(" lx => ");
-	Serial.print(int_lux_bh1750);
-	Serial.println(" ttn");
 
 }
 
 void readSensorAds1115(void)
 {
-  //Serial.println("Getting single-ended readings from AIN0..3");
-  //Serial.println("ADC Range: +/- 6.144V (1 bit = 3mV/ADS1015, 0.1875mV/ADS1115)");
+  //DEBUG_PRINTLN("Getting single-ended readings from AIN0..3");
+  //DEBUG_PRINTLN("ADC Range: +/- 6.144V (1 bit = 3mV/ADS1015, 0.1875mV/ADS1115)");
 
   // The ADC input range (or gain) can be changed via the following
   // functions, but be careful never to exceed VDD +0.3V max, or to
@@ -209,75 +213,74 @@ void readSensorAds1115(void)
   // ads.setGain(GAIN_SIXTEEN);    // 16x gain  +/- 0.256V  1 bit = 0.125mV  0.0078125mV
 
 	if (!ads.begin()) {
-		Serial.println("");
-    	Serial.println("Failed to initialize ADS1115");
+		DEBUG_PRINTLN("");
+    	DEBUG_PRINTLN("Failed to initialize ADS1115");
   	} else {
-		Serial.println("");
-		Serial.println(F("ADS1115 begin"));
+		DEBUG_PRINTLN("");
+		DEBUG_PRINTLN(F("ADS1115 begin"));
+	
+		delay(100); // Bad read without delay
+
+		/* Be sure to update this value based on the IC and the gain settings! */
+		// float   multiplier = 3.0F;    /* ADS1015 @ +/- 6.144V gain (12-bit results) */
+		//float multiplier = 0.1875F; /* ADS1115  @ +/- 6.144V gain (16-bit results) */
+		float volts0, volts1, volts2, volts3;
+
+		int_adc0 = ads.readADC_SingleEnded(0);
+		//int_adc1 = ads.readADC_SingleEnded(1);
+		int_adc1 = 0;
+		//int_adc2 = ads.readADC_SingleEnded(2);
+		int_adc2 = 0;	
+		//int_adc3 = ads.readADC_SingleEnded(3);
+		int_adc3 = 0;
+
+		// Percent Humidity only one 
+		int_perHum0 = map(int_adc0, 17400,6400,0,100);
+		int_perHum1 = 0;
+		int_perHum2 = 0;
+		int_perHum3 = 0;
+		
+		DEBUG_PRINT("AIN0: ");
+		volts0 = ads.computeVolts(int_adc0);
+		DEBUG_PRINT(volts0);
+		DEBUG_PRINT(" => ");
+		DEBUG_PRINT(int_adc0);
+		DEBUG_PRINT(" ttn ");
+		DEBUG_PRINT(" PerHum0: ");
+		DEBUG_PRINT(int_perHum0);
+		DEBUG_PRINTLN(" ttn");
+
+		DEBUG_PRINT("AIN1: ");
+		volts1 = ads.computeVolts(int_adc1);
+		DEBUG_PRINT(volts1);
+		DEBUG_PRINT(" => ");
+		DEBUG_PRINT(int_adc1);
+		DEBUG_PRINT(" ttn ");
+		DEBUG_PRINT(" PerHum1: ");
+		DEBUG_PRINT(int_perHum1);
+		DEBUG_PRINTLN(" ttn");
+
+		DEBUG_PRINT("AIN2: ");
+		volts2 = ads.computeVolts(int_adc2);
+		DEBUG_PRINT(volts2);
+		DEBUG_PRINT(" => ");
+		DEBUG_PRINT(int_adc2);
+		DEBUG_PRINT(" ttn ");
+		DEBUG_PRINT(" PerHum2: ");
+		DEBUG_PRINT(int_perHum2);
+		DEBUG_PRINTLN(" ttn");
+
+		DEBUG_PRINT("AIN3: ");
+		volts3 = ads.computeVolts(int_adc3);
+		DEBUG_PRINT(volts3);
+		DEBUG_PRINT(" => ");
+		DEBUG_PRINT(int_adc3);
+		DEBUG_PRINT(" ttn ");
+		DEBUG_PRINT(" PerHum0: ");
+		DEBUG_PRINT(int_perHum3);
+		DEBUG_PRINTLN(" ttn");
+		DEBUG_PRINTLN("");
 	}
-	
-	delay(100); // Bad read without delay
-
-	/* Be sure to update this value based on the IC and the gain settings! */
-	// float   multiplier = 3.0F;    /* ADS1015 @ +/- 6.144V gain (12-bit results) */
-	//float multiplier = 0.1875F; /* ADS1115  @ +/- 6.144V gain (16-bit results) */
-	float volts0, volts1, volts2, volts3;
-
-	int_adc0 = ads.readADC_SingleEnded(0);
-	//int_adc1 = ads.readADC_SingleEnded(1);
-	int_adc1 = 0;
-	//int_adc2 = ads.readADC_SingleEnded(2);
-	int_adc2 = 0;	
-	//int_adc3 = ads.readADC_SingleEnded(3);
-	int_adc3 = 0;
-
-	// Percent Humidity only one 
-	int_perHum0 = map(int_adc0, 15400,7100,0,100);
-	int_perHum1 = 0;
-	int_perHum2 = 0;
-	int_perHum3 = 0;
-	
-	Serial.print("AIN0: ");
-	volts0 = ads.computeVolts(int_adc0);
-	Serial.print(volts0);
-	Serial.print(" => ");
-	Serial.print(int_adc0);
-	Serial.print(" ttn ");
-	Serial.print(" PerHum0: ");
-	Serial.print(int_perHum0);
-	Serial.println(" ttn");
-
-	Serial.print("AIN1: ");
-	volts1 = ads.computeVolts(int_adc1);
-	Serial.print(volts1);
-	Serial.print(" => ");
-	Serial.print(int_adc1);
-	Serial.print(" ttn ");
-	Serial.print(" PerHum1: ");
-	Serial.print(int_perHum1);
-	Serial.println(" ttn");
-
-	Serial.print("AIN2: ");
-	volts2 = ads.computeVolts(int_adc2);
-	Serial.print(volts2);
-	Serial.print(" => ");
-	Serial.print(int_adc2);
-	Serial.print(" ttn ");
-	Serial.print(" PerHum2: ");
-	Serial.print(int_perHum2);
-	Serial.println(" ttn");
-
-	Serial.print("AIN3: ");
-	volts3 = ads.computeVolts(int_adc3);
-	Serial.print(volts3);
-	Serial.print(" => ");
-	Serial.print(int_adc3);
-	Serial.print(" ttn ");
-	Serial.print(" PerHum0: ");
-	Serial.print(int_perHum3);
-	Serial.println(" ttn");
-	Serial.println("");
-
 
 }
 
@@ -289,18 +292,24 @@ void readSensors()
 
 	delay(1000);
 	// debug
-	Serial.println("");
-	Serial.println("Read sensors");
+	DEBUG_PRINTLN("");
+	DEBUG_PRINTLN("Read sensors");
 
 	readSensorBME280();
+	delay(100);		
+
 	readSensorBH1750();
+	delay(100);		
+	
 	readSensorAds1115();
+	delay(100);		
 
 	// Necesario para que vuelva a funcionar despues del Sleep
 	Wire.end();
 
 	// Vext OFF
 	digitalWrite(Vext, HIGH);
+	delay(50);		
 }
 
 /* Prepares the payload of the frame */
@@ -313,8 +322,8 @@ static void prepareTxFrame(uint8_t port)
 	 *for example, if use REGION_CN470,
 	 *the max value for different DR can be found in MaxPayloadOfDatarateCN470 refer to DataratesCN470 and BandwidthsCN470 in "RegionCN470.h".
 	 */
-	readBatteryVoltage();
 	readSensors();
+	readBatteryVoltage();
 
 	appDataSize = 24;
 	// Battery
@@ -355,13 +364,13 @@ static void prepareTxFrame(uint8_t port)
 // downlink data handle function example
 void downLinkDataHandle(McpsIndication_t *mcpsIndication)
 {
-	Serial.printf("+REV DATA:%s,RXSIZE %d,PORT %d\r\n", mcpsIndication->RxSlot ? "RXWIN2" : "RXWIN1", mcpsIndication->BufferSize, mcpsIndication->Port);
-	Serial.print("+REV DATA:");
+	DEBUG_PRINTF("+REV DATA:%s,RXSIZE %d,PORT %d\r\n", mcpsIndication->RxSlot ? "RXWIN2" : "RXWIN1", mcpsIndication->BufferSize, mcpsIndication->Port);
+	DEBUG_PRINT("+REV DATA:");
 	for (uint8_t i = 0; i < mcpsIndication->BufferSize; i++)
 	{
-		Serial.printf("%02X", mcpsIndication->Buffer[i]);
+		DEBUG_PRINTF("%02X", mcpsIndication->Buffer[i]);
 	}
-	Serial.println();
+	DEBUG_PRINTLN();
 	uint32_t color = mcpsIndication->Buffer[0] << 16 | mcpsIndication->Buffer[1] << 8 | mcpsIndication->Buffer[2];
 #if (LoraWan_RGB == 1)
 	turnOnRGB(color, 5000);
@@ -371,7 +380,11 @@ void downLinkDataHandle(McpsIndication_t *mcpsIndication)
 
 void setup()
 {
+
+#ifdef DEBUG	
 	Serial.begin(115200);
+#endif	
+
 #if (AT_SUPPORT)
 	enableAt();
 #endif
