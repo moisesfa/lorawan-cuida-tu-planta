@@ -23,6 +23,10 @@ BH1750 lightMeter;
 Adafruit_ADS1115 ads; /* Use this for the 16-bit version */
 
 // Variables
+bool bme280_found = false;
+bool bh1750_found = false;
+bool ads1115_found = false;
+
 uint16_t BatteryVoltage;
 int16_t int_temp_bme280;
 uint16_t int_humi_bme280;
@@ -124,8 +128,8 @@ void readSensorBME280(void)
 	} else{
 		DEBUG_PRINTLN("");
 		DEBUG_PRINTLN("bme280 begin");
-	
-		delay(100);		
+
+		delay(1000); // Bad read without delay
 
 		// Read sensor BME280
 		float temp_bme280 = bme280.getTemperature(); 
@@ -165,7 +169,7 @@ void readSensorBME280(void)
 		DEBUG_PRINT(" m => ");
 		DEBUG_PRINT(int_alti_bme280);
 		DEBUG_PRINTLN(" ttn");
-		}
+	}
 }
 
 void readSensorBH1750(void)
@@ -179,7 +183,7 @@ void readSensorBH1750(void)
 		DEBUG_PRINTLN("");
 		DEBUG_PRINTLN(F("lightMeter begin"));
 
-		delay(100); // Bad read without delay 
+		delay(100); // Bad read without delay
 
 		float lux_bh1750 = lightMeter.readLightLevel(); 
 
@@ -211,16 +215,15 @@ void readSensorAds1115(void)
   // ads.setGain(GAIN_FOUR);       // 4x gain   +/- 1.024V  1 bit = 0.5mV    0.03125mV
   // ads.setGain(GAIN_EIGHT);      // 8x gain   +/- 0.512V  1 bit = 0.25mV   0.015625mV
   // ads.setGain(GAIN_SIXTEEN);    // 16x gain  +/- 0.256V  1 bit = 0.125mV  0.0078125mV
+  
 
-	if (!ads.begin()) {
+	if (!ads1115_found) {
 		DEBUG_PRINTLN("");
     	DEBUG_PRINTLN("Failed to initialize ADS1115");
   	} else {
 		DEBUG_PRINTLN("");
 		DEBUG_PRINTLN(F("ADS1115 begin"));
 	
-		delay(100); // Bad read without delay
-
 		/* Be sure to update this value based on the IC and the gain settings! */
 		// float   multiplier = 3.0F;    /* ADS1015 @ +/- 6.144V gain (12-bit results) */
 		//float multiplier = 0.1875F; /* ADS1115  @ +/- 6.144V gain (16-bit results) */
@@ -284,28 +287,25 @@ void readSensorAds1115(void)
 
 }
 
-void readSensors()
-{
+void readSensors(){
 	// Vext ON
 	pinMode(Vext, OUTPUT);
 	digitalWrite(Vext, LOW);
+	delay(100); // Bad read without delay
 
-	delay(1000);
 	// debug
 	DEBUG_PRINTLN("");
 	DEBUG_PRINTLN("Read sensors");
 
 	readSensorBME280();
-	delay(100);		
-
+	
 	readSensorBH1750();
-	delay(100);		
 	
 	readSensorAds1115();
-	delay(100);		
-
+	
 	// Necesario para que vuelva a funcionar despues del Sleep
 	Wire.end();
+	delay(100);		
 
 	// Vext OFF
 	digitalWrite(Vext, HIGH);
@@ -322,8 +322,8 @@ static void prepareTxFrame(uint8_t port)
 	 *for example, if use REGION_CN470,
 	 *the max value for different DR can be found in MaxPayloadOfDatarateCN470 refer to DataratesCN470 and BandwidthsCN470 in "RegionCN470.h".
 	 */
-	readSensors();
 	readBatteryVoltage();
+	readSensors();
 
 	appDataSize = 24;
 	// Battery
@@ -362,6 +362,7 @@ static void prepareTxFrame(uint8_t port)
 }
 
 // downlink data handle function example
+/*
 void downLinkDataHandle(McpsIndication_t *mcpsIndication)
 {
 	DEBUG_PRINTF("+REV DATA:%s,RXSIZE %d,PORT %d\r\n", mcpsIndication->RxSlot ? "RXWIN2" : "RXWIN1", mcpsIndication->BufferSize, mcpsIndication->Port);
@@ -377,10 +378,10 @@ void downLinkDataHandle(McpsIndication_t *mcpsIndication)
 	turnOffRGB();
 #endif
 }
+*/
 
 void setup()
 {
-
 #ifdef DEBUG	
 	Serial.begin(115200);
 #endif	
@@ -388,8 +389,27 @@ void setup()
 #if (AT_SUPPORT)
 	enableAt();
 #endif
+
+	// Vext ON
+	pinMode(Vext, OUTPUT);
+	digitalWrite(Vext, LOW);
+	delay(100);
+	// debug
+	DEBUG_PRINTLN("");
+	DEBUG_PRINTLN("Setup sensors");
+
+	if (!ads.begin()) {
+		DEBUG_PRINTLN("");
+    	DEBUG_PRINTLN("Failed to initialize ADS1115");
+  	} else {
+		DEBUG_PRINTLN("");
+		DEBUG_PRINTLN(F("ADS1115 begin"));
+		ads1115_found = true;
+	}
+
 	deviceState = DEVICE_STATE_INIT;
 	LoRaWAN.ifskipjoin();
+
 }
 
 void loop()
