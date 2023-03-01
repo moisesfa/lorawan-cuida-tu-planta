@@ -406,6 +406,14 @@ void setup()
 		DEBUG_PRINTLN(F("ADS1115 begin"));
 		ads1115_found = true;
 	}
+	
+	// Necesario para liberar el I2C 
+	Wire.end();
+	delay(100);		
+
+	// Vext OFF
+	digitalWrite(Vext, HIGH);
+	delay(50);		
 
 	deviceState = DEVICE_STATE_INIT;
 	LoRaWAN.ifskipjoin();
